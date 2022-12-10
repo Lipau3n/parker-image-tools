@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en" class="h-100">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>PIT — Parker Image Tools</title>
+    <link href="static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="static/bootstrap-icons-1.9.1/bootstrap-icons.css">
+    <link href="static/fonts/din_condensed/style.css" rel="stylesheet">
+    <link href="static/main.css" rel="stylesheet">
+</head>
+<body class="d-flex flex-column h-100">
+
+<header>
+    <nav class="navbar navbar-expand-md fixed-top bg-light border-bottom">
+        <div class="container-fluid">
+            <a class="navbar-brand" style="cursor: pointer" onclick="location.reload()">Parker Image Tools</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
+                    aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <ul class="navbar-nav me-auto mb-2 mb-md-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Link</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link disabled">Disabled</a>
+                    </li>
+                </ul>
+                <form class="d-flex" role="search">
+                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success" type="submit">Search</button>
+                </form>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<main class="flex-shrink-0" style="padding-top: 60px;">
+    <div class="container d-flex justify-content-center" id="main-container">
+        <div class="w-100">
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="bi bi-instagram"></i> Instagram story</h5>
+                    <p class="card-text">1080 × 1920</p>
+                    <a href="#" class="btn btn-primary" onclick="start(9, 16, 1080, 1920, 'story')">Start</a>
+                </div>
+            </div>
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="bi bi-instagram"></i> Instagram square</h5>
+                    <p class="card-text">1080 × 1080</p>
+                    <a href="#" class="btn btn-primary" onclick="start(1, 1, 1080, 1080, 'square')">Start</a>
+                </div>
+            </div>
+            <!--            <div class="card mb-3">-->
+            <!--                <div class="card-body">-->
+            <!--                    <h5 class="card-title"><i class="bi bi-instagram"></i> Instagram post full</h5>-->
+            <!--                    <p class="card-text">1080 × 1350</p>-->
+            <!--                    <a href="#" class="btn btn-primary" onclick="start(4, 5, 1080, 1350)">Start</a>-->
+            <!--                </div>-->
+            <!--            </div>-->
+        </div>
+    </div>
+</main>
+
+<footer class="footer mt-auto border-top fixed-bottom">
+    <div class="border-bottom bg-light py-2 px-3" id="subfooter">
+        <div class="container">
+            <div id="settings1">
+                <div class="py-3">
+                    <a href="#" class="btn btn-danger">Reset all</a>
+                </div>
+            </div>
+            <div id="settings2">
+                <div class="mb-2">
+                    <label for="border-size" class="form-label">Border size</label>
+                    <input type="range" class="form-range" id="border-size" min="0" max="100" step="1" value="0">
+                </div>
+                <div class="mb-2">
+                    <label class="mb-1">Background color</label>
+                    <div class="d-flex" style="gap: 16px">
+                        <div class="color-choice border-double active rounded-circle" style="background-color: #000;"
+                             onclick="colorChoice(event)"></div>
+                        <div class="color-choice border-double rounded-circle" style="background-color: #fff;"
+                             onclick="colorChoice(event)"></div>
+                    </div>
+                </div>
+            </div>
+            <div id="settings3">
+                <div class="d-flex">
+                    <a href="#" class="btn btn-light active"><i class="bi bi-1-square"></i></a>
+                    <a href="#" class="btn btn-light"><i class="bi bi-2-square"></i></a>
+                    <a href="#" class="btn btn-light"><i class="bi bi-3-square"></i></a>
+                    <a href="#" class="btn btn-light"><i class="bi bi-4-square"></i></a>
+                </div>
+            </div>
+            <div id="settings4">
+                <div class="mb-2">
+                    <input type="text" class="form-control" id="text-header" placeholder="Header" autocomplete="off"/>
+                </div>
+                <div class="mb-2">
+                    <input type="text" class="form-control" id="text-subheader" placeholder="Subheader"
+                           autocomplete="off"/>
+                </div>
+                <div class="mb-2 d-flex justify-content-between">
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" role="switch" id="text-switch"
+                               autocomplete="off">
+                    </div>
+                    <div><a href="#" id="text-clear">Clear</a></div>
+                </div>
+            </div>
+            <div id="download-container">
+                <!--TODO: size choice-->
+                <div class="d-flex py-3">
+                    <a href="#" id="download" class="ms-auto btn btn-primary">
+                        <i class="bi bi-cloud-arrow-down"></i> Download
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="bg-light">
+        <div class="container py-2">
+            <ul class="nav nav-pills justify-content-center text-dark">
+                <!--                <li class="nav-item settings-menu-item" id="settings1-menu-link">-->
+                <!--                    <a href="#" onclick="openMenu('#settings1')" class="nav-link text-dark">-->
+                <!--                        <i class="bi bi-gear-wide-connected"></i>-->
+                <!--                    </a>-->
+                <!--                    <span class="settings-menu-item-title">General</span>-->
+                <!--                </li>-->
+                <li class="nav-item settings-menu-item" id="settings2-menu-link">
+                    <a href="#" onclick="openMenu('#settings2')" class="nav-link text-dark">
+                        <i class="bi bi-aspect-ratio"></i>
+                    </a>
+                    <span class="settings-menu-item-title">Borders</span>
+                </li>
+                <!--                <li class="nav-item settings-menu-item" id="settings3-menu-link">-->
+                <!--                    <a href="#" onclick="openMenu('#settings3')" class="nav-link text-dark">-->
+                <!--                        <i class="bi bi-columns"></i>-->
+                <!--                    </a>-->
+                <!--                </li>-->
+                <li class="nav-item settings-menu-item" id="settings4-menu-link">
+                    <a href="#" onclick="openMenu('#settings4')" class="nav-link text-dark">
+                        <i class="bi bi-card-text"></i>
+                    </a>
+                    <span class="settings-menu-item-title">Sign</span>
+                </li>
+                <li class="nav-item settings-menu-item ms-auto" id="download-menu-link">
+                    <a href="#" onclick="openMenu('#download-container')" class="nav-link text-dark">
+                        <i class="bi bi-cloud-arrow-down"></i>
+                    </a>
+                    <span class="settings-menu-item-title">Download</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</footer>
+
+<template id="default-frame">
+    <div id="frame-container">
+        <div class="text-light border-double d-flex justify-content-center align-items-center flex-column" id="frame">
+            <div id="sign" class="w-100 bg-white text-black">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="p-1" style="max-width: 70%">
+                        <div class="sign-header">Header</div>
+                        <div class="sign-subheader text-muted">Subheader</div>
+                    </div>
+                    <div class="parker-sign py-1 px-3 my-auto">
+                        паркер
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<template id="image-upload-container">
+    <div class="js-image-upload-container">
+        <a href="#" class="btn btn-light btn-add-image"><i class="bi bi-file-earmark-plus"></i> Add image</a>
+        <input type="file" class="btn btn-light d-none file-select">
+    </div>
+</template>
+
+<script src="static/bootstrap/js/bootstrap.min.js"></script>
+<script src="static/jquery/jquery-3.6.0.min.js"></script>
+<script src="static/jquery/jquery-ui.min.js"></script>
+<script src="static/html2canvas/html2canvas.min.js"></script>
+<script src="static/main.js"></script>
+</body>
+</html>
