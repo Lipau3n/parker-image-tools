@@ -21,6 +21,9 @@ let FRAME_UPSCALE = null;
 let OUTPUT_WIDTH = null;
 let OUTPUT_HEIGHT = null;
 let FRAME_NAME = null;
+let FILE = null;
+
+const rgb2hex = (rgb) => `${rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/).slice(1).map(n => parseInt(n, 10).toString(16).padStart(2, '0')).join('')}`
 
 $(document).ready(function () {
     $SUBFOOTER.css('display', 'none');
@@ -81,6 +84,7 @@ function createContainer() {
         let img_width;
         let img_height;
         let objectUrl = URL.createObjectURL(event.target.files[0]);
+        FILE = event.target.files[0];
         img.onload = function () {
             img_width = this.width;
             img_height = this.height;
@@ -116,20 +120,54 @@ function createContainer() {
     })
 
     $BTN_DOWNLOAD.on('click', function () {
-        const widthScale = OUTPUT_WIDTH / FRAME_WIDTH;
-        const heightScale = OUTPUT_HEIGHT / FRAME_HEIGHT;
-        let c = html2canvas(document.getElementById('frame'), {
-            width: OUTPUT_WIDTH,
-            height: OUTPUT_HEIGHT,
-            backgroundColor: $frame.css('background-color'),
-        }).then(canvas => {
-            let canvas_data = canvas.toDataURL('image/jpeg');
-            let a = document.createElement('a');
-            a.target = "_blank";
-            a.href = canvas_data;
-            a.click();
-        });
+        download();
+        // const widthScale = OUTPUT_WIDTH / FRAME_WIDTH;
+        // const heightScale = OUTPUT_HEIGHT / FRAME_HEIGHT;
+        // let c = html2canvas(document.getElementById('frame'), {
+        //     width: OUTPUT_WIDTH,
+        //     height: OUTPUT_HEIGHT,
+        //     backgroundColor: $frame.css('background-color'),
+        // }).then(canvas => {
+        //     let canvas_data = canvas.toDataURL('image/jpeg');
+        //     let a = document.createElement('a');
+        //     a.target = "_blank";
+        //     a.href = canvas_data;
+        //     a.click();
+        // });
     })
+}
+
+function download() {
+    let color_hex = rgb2hex($('.color-choice.active').css('background-color'));
+    let formData = new FormData();
+    formData.append("file", FILE, FILE.name);
+    $.ajax({
+        url: `/export/?width=${OUTPUT_WIDTH}&height=${OUTPUT_HEIGHT}&background=${color_hex}`,
+        method: 'POST',
+        data: formData,
+        cache: false,
+        contentType: false,
+        processData: false,
+        xhrFields: {
+            responseType: 'blob' // to avoid binary data being mangled on charset conversion
+        },
+        success: function (blob, status, xhr) {
+            // let blob = new Blob([new Uint8Array(response, 0, response.length)], {type: 'image/jpeg'});
+            // let blob = new Blob([response], {type: 'image/jpeg'});
+            let urlCreator = window.URL || window.webkitURL;
+            let href = urlCreator.createObjectURL(blob);
+            let a = document.createElement('a');
+            a.target = '_blank';
+            a.href = href;
+            a.download = 'parker-image-tools.jpeg';
+            $("body").append(a);
+            a.click();
+            $("body").remove(a);
+        },
+        error: function (response) {
+            console.error(response);
+        },
+    });
 }
 
 function scaleFrame($frame, up = false) {

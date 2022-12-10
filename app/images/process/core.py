@@ -55,7 +55,6 @@ class ImageProcess:
         output = BytesIO()
         image = self.process()
         image.save(output, format='JPEG', quality=100, optimize=True)
-        image.show()
         return output
 
     def preview(self) -> BytesIO:

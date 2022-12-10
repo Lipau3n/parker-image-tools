@@ -4,17 +4,17 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>PIT — Parker Image Tools</title>
-    <link href="static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="static/bootstrap-icons-1.9.1/bootstrap-icons.css">
-    <link href="static/fonts/din_condensed/style.css" rel="stylesheet">
-    <link href="static/main.css" rel="stylesheet">
+    <link href="/static/fonts/din_condensed/style.css" rel="stylesheet">
+    <link href="/static/main.css" rel="stylesheet">
 </head>
 <body class="d-flex flex-column h-100">
 
 <header>
     <nav class="navbar navbar-expand-md fixed-top bg-light border-bottom">
         <div class="container-fluid">
-            <a class="navbar-brand" style="cursor: pointer" onclick="location.reload()">Parker Image Tools</a>
+            <a class="navbar-brand" style="cursor: pointer" href="/">Parker Image Tools</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
                     aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -182,15 +182,17 @@
 
 <template id="image-upload-container">
     <div class="js-image-upload-container">
-        <a href="#" class="btn btn-light btn-add-image"><i class="bi bi-file-earmark-plus"></i> Add image</a>
+        <a href="#" class="btn btn-light btn-add-image" style="transform: scale(300%)">
+            <i class="bi bi-file-earmark-plus"></i> Add image
+        </a>
         <input type="file" class="btn btn-light d-none file-select">
     </div>
 </template>
 
-<script src="static/bootstrap/js/bootstrap.min.js"></script>
-<script src="static/jquery/jquery-3.6.0.min.js"></script>
-<script src="static/jquery/jquery-ui.min.js"></script>
-<script src="static/html2canvas/html2canvas.min.js"></script>
-<script src="static/main.js"></script>
+<script src="/static/bootstrap/js/bootstrap.min.js"></script>
+<script src="/static/jquery/jquery-3.6.0.min.js"></script>
+<script src="/static/jquery/jquery-ui.min.js"></script>
+<!--<script src="/static/html2canvas/html2canvas.min.js"></script>-->
+<script src="/static/main.js"></script>
 </body>
 </html>

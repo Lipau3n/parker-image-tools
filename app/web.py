@@ -1,18 +1,22 @@
 from dataclasses import asdict
 from io import BytesIO
 
-from fastapi import FastAPI, File, Query
+from fastapi import FastAPI, File, Query, Request
 from starlette.responses import StreamingResponse
+from starlette.staticfiles import StaticFiles
+from starlette.templating import Jinja2Templates
 
-from images.process.core import ImageProcess
-from images.read import ImageRead
+from app.images.process.core import ImageProcess
+from app.images.read import ImageRead
 
 app = FastAPI()
+templates = Jinja2Templates(directory="templates")
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 
 @app.get("/")
-async def root():
-    return "health check"
+async def root(request: Request):
+    return templates.TemplateResponse(name="index.html", context={'request': request})
 
 
 @app.post("/read/")
@@ -24,7 +28,7 @@ async def read(file: bytes = File()):
 
 
 size_q = Query(gt=0, le=7680)
-background_q = Query(default='#000000', regex=r'#[0-9A-F]{6}')
+background_q = Query(default='000000', regex='[0-9a-fA-F]{6}')
 
 
 @app.post("/export/")
@@ -34,6 +38,7 @@ async def export(
         background: str = background_q,
         file: bytes = File(),
 ):
+    background = f'#{background.upper()}'
     file = BytesIO(file)
     ip = ImageProcess(file, width=width, height=height, background=background)
     image = ip.save()
