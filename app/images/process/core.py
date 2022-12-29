@@ -1,4 +1,5 @@
 from io import BytesIO
+from tempfile import NamedTemporaryFile
 from typing import Tuple
 import math
 
@@ -22,7 +23,6 @@ class ImageProcess:
                  width: int, height: int, background: str,
                  ):
         file.seek(0)
-        self._file = file
         self.image = PILImage.open(file)
         self.width = width
         self.height = height
@@ -50,16 +50,15 @@ class ImageProcess:
         layout.paste(resized_image, box=offset)
         return layout
 
-    def save(self) -> BytesIO:
-        """ Return BytesIO object of processed image """
-        output = BytesIO()
+    def save(self, buf: BytesIO):
+        """ Set full processed image to buffer """
+        # output = BytesIO()
         image = self.process()
-        image.save(output, format='JPEG', quality=100, optimize=True)
-        return output
+        image.save(buf, format='JPEG', quality=100, optimize=True)
+        buf.seek(0)
 
-    def preview(self) -> BytesIO:
-        """ Return BytesIO object of processed image preview """
-        output = BytesIO()
+    def preview(self, buf: BytesIO):
+        """ Set preview of processed image to buffer """
         image = self.process()
-        image.save(output, format='JPEG', quality=80)
-        return output
+        image.save(buf, format='JPEG', quality=80)
+        buf.seek(0)

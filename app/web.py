@@ -1,13 +1,17 @@
 from dataclasses import asdict
 from io import BytesIO
+import gc
 
-from fastapi import FastAPI, File, Query, Request
+from fastapi import FastAPI, File, Query, Request, UploadFile
+from fastapi_utils.tasks import repeat_every
 from starlette.responses import StreamingResponse
 from starlette.staticfiles import StaticFiles
 from starlette.templating import Jinja2Templates
 
 from app.images.process.core import ImageProcess
 from app.images.read import ImageRead
+
+gc.enable()
 
 app = FastAPI()
 templates = Jinja2Templates(directory="templates")
@@ -33,21 +37,30 @@ size_q = Query(gt=0, le=7680)
 background_q = Query(default='000000', regex='[0-9a-fA-F]{6}')
 
 
+@app.on_event("startup")
+@repeat_every(seconds=60)
+def remove_expired_tokens_task() -> None:
+    gc.collect()
+
+
 @app.post("/export/")
 async def export(
+        file: UploadFile,
         width: int = size_q,
         height: int = size_q,
         background: str = background_q,
-        file: bytes = File(),
 ):
     background = f'#{background.upper()}'
-    file = BytesIO(file)
-    ip = ImageProcess(file, width=width, height=height, background=background)
-    image = ip.save()
-    image.seek(0)
-    file.close()
-    image.close()
-    return StreamingResponse(content=image, media_type='image/jpeg')
+    source_content = await file.read()
+
+    def iter():
+        with BytesIO(source_content) as source, BytesIO() as target:
+            ip = ImageProcess(source, width=width, height=height, background=background)
+            ip.save(target)
+            yield from target
+
+    await file.close()
+    return StreamingResponse(content=iter(), media_type='image/jpeg')
 
 
 @app.post("/preview/")
