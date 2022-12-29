@@ -24,7 +24,9 @@ async def read(file: bytes = File()):
     size = len(file)
     file = BytesIO(file)
     img = ImageRead(file, size=size)
-    return asdict(img.read())
+    meta = img.read()
+    file.close()
+    return asdict(meta)
 
 
 size_q = Query(gt=0, le=7680)
@@ -43,6 +45,8 @@ async def export(
     ip = ImageProcess(file, width=width, height=height, background=background)
     image = ip.save()
     image.seek(0)
+    file.close()
+    image.close()
     return StreamingResponse(content=image, media_type='image/jpeg')
 
 
