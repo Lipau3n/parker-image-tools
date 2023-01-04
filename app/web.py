@@ -61,8 +61,3 @@ async def export(
 
     await file.close()
     return StreamingResponse(content=iter(), media_type='image/jpeg')
-
-
-@app.post("/preview/")
-async def preview():
-    return {}
